@@ -1,45 +1,5 @@
 import 'package:flutter/material.dart';
 
-// class HomeScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Color(0xFFF8F8F8),
-//       body: SafeArea(
-//         child: Column(
-//           children: [
-//             // Encabezado
-//             Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-//               child: Row(
-//                 children: [
-//                   // Avatar
-//                   CircleAvatar(
-//                     backgroundImage: AssetImage('assets/avatar.jpg'),
-//                     radius: 20,
-//                   ),
-//                   SizedBox(width: 10),
-//                   // Título
-//                   Expanded(
-//                     child: Text(
-//                       'Finanzas\npersonales',
-//                       style: TextStyle(
-//                         fontSize: 20,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                   ),
-//                   // Icono de ajustes
-//                   Icon(Icons.tune),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class HomeScreen extends StatefulWidget {
   @override
