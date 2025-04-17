@@ -31,6 +31,7 @@ class DBHelper {
               id INTEGER PRIMARY KEY AUTOINCREMENT,
               categoria TEXT,
               monto INTEGER,
+              descripcion TEXT,
               fecha TEXT
             )
           ''');
@@ -55,6 +56,7 @@ class DBHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         categoria TEXT,
         monto INTEGER,
+        descripcion TEXT,
         fecha TEXT
       )
     ''');
@@ -101,18 +103,21 @@ class DBHelper {
 
   // ================= GASTOS =================
 
-  Future<void> insertarGasto(String categoria, int monto, String fecha) async {
+  Future<void> insertarGasto(String categoria, int monto, String descripcion, String fecha) async {
     final db = await database;
     await db.insert(
       'gastos',
       {
         'categoria': categoria,
         'monto': monto,
+        'descripcion': descripcion,
         'fecha': fecha,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+
 
   Future<List<Map<String, dynamic>>> obtenerGastosPorCategoria(String categoria) async {
     final db = await database;

@@ -35,29 +35,129 @@ class _PantallaCategoriaState extends State<PantallaCategoria> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.categoria.nombre)),
+      backgroundColor: Color(0xFFF8F8F8),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: Colors.black,
+        title: const Text('Gastos'),
+        actions: const [Icon(Icons.tune)],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: Column(
         children: [
-          Card(
-            margin: const EdgeInsets.all(16),
-            child: ListTile(
-              leading: Image.asset(widget.categoria.rutaIcono, width: 40, height: 40),
-              title: Text(widget.categoria.nombre.toUpperCase()),
-              subtitle: Text('Total: \$${total.toString()}'),
+          // Tarjeta total
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(widget.categoria.rutaIcono, width: 36, height: 36),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.categoria.nombre.toUpperCase(),
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      Text(
+                        '\$${total.toString()}',
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 4),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Text('+49,89%', style: TextStyle(color: Colors.white)),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.account_balance_wallet_outlined),
+              ],
             ),
           ),
-          const Divider(),
+
+          // Filtros
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                Row(children: [Icon(Icons.expand_less), Text(' Short by')]),
+                Row(children: [Text('Last 24h'), Icon(Icons.expand_more)]),
+              ],
+            ),
+          ),
+
+          // Lista de gastos
           Expanded(
             child: gastos.isEmpty
-                ? Center(child: Text('No hay gastos registrados'))
+                ? const Center(child: Text('No hay gastos registrados'))
                 : ListView.builder(
                     itemCount: gastos.length,
                     itemBuilder: (_, i) {
                       final gasto = gastos[i];
-                      return ListTile(
-                        title: Text('\$${gasto.monto}'),
-                        subtitle: Text(
-                          '${gasto.fecha.day}/${gasto.fecha.month}/${gasto.fecha.year}',
+                      return Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.deepPurple,
+                              ),
+                              child: const Icon(Icons.attach_money, color: Colors.white),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(gasto.descripcion.toUpperCase(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Colors.black)),
+                                  Text('\$${gasto.monto}',
+                                      style: const TextStyle(color: Colors.grey)),
+                                ],
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: const [
+                                Text(
+                                  '\$89.759',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold, color: Colors.black),
+                                ),
+                                Text(
+                                  '+4,89%',
+                                  style: TextStyle(color: Colors.green),
+                                )
+                              ],
+                            ),
+                          ],
                         ),
                       );
                     },
@@ -66,6 +166,7 @@ class _PantallaCategoriaState extends State<PantallaCategoria> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
         child: const Icon(Icons.add),
         onPressed: () async {
           await Navigator.push(

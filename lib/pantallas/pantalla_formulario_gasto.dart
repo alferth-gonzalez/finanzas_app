@@ -11,6 +11,8 @@ class PantallaFormularioGasto extends StatefulWidget {
 
 class _PantallaFormularioGastoState extends State<PantallaFormularioGasto> {
   String entrada = '';
+  String descripcion = '';
+
 
   void _alPresionarTecla(String valor) {
     setState(() {
@@ -22,17 +24,40 @@ class _PantallaFormularioGastoState extends State<PantallaFormularioGasto> {
     });
   }
 
+  // void _guardar() async {
+  //   final monto = int.tryParse(entrada) ?? 0;
+  //   if (monto > 0) {
+  //     await DBHelper().insertarGasto(
+  //       widget.categoria,
+  //       monto,
+  //       descripcion,
+  //       DateTime.now().toIso8601String(),
+  //     );
+
+  //     Navigator.pop(context);
+  //   }
+  // }
+
   void _guardar() async {
-    final monto = int.tryParse(entrada) ?? 0;
-    if (monto > 0) {
-      await DBHelper().insertarGasto(
-        widget.categoria,
-        monto,
-        DateTime.now().toIso8601String(),
-      );
-      Navigator.pop(context);
+    try {
+      final monto = int.tryParse(entrada) ?? 0;
+      if (monto > 0) {
+        await DBHelper().insertarGasto(
+          widget.categoria,
+          monto,
+          descripcion,
+          DateTime.now().toIso8601String(),
+        );
+        print("✅ Gasto guardado");
+        Navigator.pop(context);
+      } else {
+        print("⚠️ Monto inválido");
+      }
+    } catch (e) {
+      print("❌ Error al guardar: $e");
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +90,20 @@ class _PantallaFormularioGastoState extends State<PantallaFormularioGasto> {
                     ),
                   ),
                   const SizedBox(height: 16),
+                  TextFormField(
+                    onChanged: (value) => descripcion = value,
+                    decoration: InputDecoration(
+                      hintText: 'Descripción del gasto',
+                      filled: true,
+                      fillColor: Colors.grey.shade200,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
