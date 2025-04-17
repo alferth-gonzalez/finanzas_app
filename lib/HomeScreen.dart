@@ -78,7 +78,7 @@ class MainWalletScreen extends StatelessWidget {
           child: Row(
             children: [
               CircleAvatar(
-                backgroundImage: AssetImage('assets/avatar.jpg'),
+                backgroundImage: AssetImage('assets/user-icon.png'),
                 radius: 20,
               ),
               SizedBox(width: 10),
