@@ -1,5 +1,5 @@
-import 'package:finanzas_app/HomeScreen.dart';
 import 'package:flutter/material.dart';
+import 'LoginScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,10 +11,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Finanzas Personales',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: HomeScreen(), // Este es el punto de entrada
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: LoginScreen(), // Ahora inicia aquí
     );
   }
 }
