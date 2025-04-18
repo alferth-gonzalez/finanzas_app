@@ -20,20 +20,49 @@ class DBHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (db, version) async {
-        await db.execute('''
-          CREATE TABLE users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre TEXT,
-            correo TEXT UNIQUE,
-            password TEXT,
-            fechaNacimiento TEXT
-          )
-        ''');
+        await _crearTablas(db);
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute('''
+            CREATE TABLE gastos (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              categoria TEXT,
+              monto INTEGER,
+              descripcion TEXT,
+              fecha TEXT
+            )
+          ''');
+        }
       },
     );
   }
+
+  Future<void> _crearTablas(Database db) async {
+    await db.execute('''
+      CREATE TABLE users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombre TEXT,
+        correo TEXT UNIQUE,
+        password TEXT,
+        fechaNacimiento TEXT
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE gastos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        categoria TEXT,
+        monto INTEGER,
+        descripcion TEXT,
+        fecha TEXT
+      )
+    ''');
+  }
+
+  // ================= USUARIOS =================
 
   Future<int> registerUser(String nombre, String correo, String password, String fechaNacimiento) async {
     final db = await database;
@@ -70,5 +99,44 @@ class DBHelper {
       whereArgs: [correo],
     );
     return result.isNotEmpty;
+  }
+
+  // ================= GASTOS =================
+
+  Future<void> insertarGasto(String categoria, int monto, String descripcion, String fecha) async {
+    final db = await database;
+    await db.insert(
+      'gastos',
+      {
+        'categoria': categoria,
+        'monto': monto,
+        'descripcion': descripcion,
+        'fecha': fecha,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+
+
+  Future<List<Map<String, dynamic>>> obtenerGastosPorCategoria(String categoria) async {
+    final db = await database;
+    return await db.query(
+      'gastos',
+      where: 'categoria = ?',
+      whereArgs: [categoria],
+      orderBy: 'fecha DESC',
+    );
+  }
+
+  Future<Map<String, int>> totalesPorCategoria() async {
+    final db = await database;
+    final resultado = await db.rawQuery(
+      'SELECT categoria, SUM(monto) AS total FROM gastos GROUP BY categoria'
+    );
+    return {
+      for (var fila in resultado)
+        fila['categoria'] as String: fila['total'] as int
+    };
   }
 }

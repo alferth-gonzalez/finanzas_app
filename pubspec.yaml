@@ -58,6 +58,10 @@ flutter:
       - assets/cerdito.png
       - assets/user-icon.png
       - assets/monedas.png
+      - assets/alimentacion-icon.png
+      - assets/carro-icon.png
+      - assets/educacion-icon.png
+      - assets/entretenimiento-icon.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
